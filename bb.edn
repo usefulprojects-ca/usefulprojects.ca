@@ -3,6 +3,19 @@
  {test
   {:doc "Runs tests"}
 
+  dev
+  {:doc "Starts the development environment dependencies."
+   :task (shell "docker-compose up")}
+
+  psql
+  {:doc "Opens a psql terminal to the repl terminal."
+   :task (shell "docker-compose exec --env \"PGPASSWORD=consider_me_compromised\" postgres psql --user=pguser --dbname=repl
+")}
+
+  rm-dev
+  {:doc "Destroys the development environment. WARNING: Will destroy locally stored data."
+   :task (shell "docker-compose down --volumes")}
+
   repl
   {:doc "Start a REPL. May provide aliases to use, .e.g `bb repl my-alias1 my-alias2"
    :requires ([clojure.string :as str])
