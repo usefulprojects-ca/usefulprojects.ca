@@ -10,7 +10,7 @@ services:
       - postgres
 
   postgres:
-    image: "postgres:14.2"
+    image: "postgres:14.2-alpine"
     restart: always
     ports:
       - "5000:5432"
