@@ -1,4 +1,4 @@
-(ns ca.usefulprojects.app
+(ns ca.usefulprojects.handler
   (:require
    [reitit.ring :as ring]
    [taoensso.timbre :as log]))
@@ -11,11 +11,12 @@
 (defn ping [_request]
   {:status 200 :body "pong!"})
 
-(def app
+(defn make-handler []
   (ring/ring-handler
     (ring/router ["/ping" ping]
                  {:data {:middleware [request-logging-middleware]}})
     (ring/create-default-handler)))
 
 (comment
-  (app {:request-method :get :uri "/ping"}))
+  (def handler (make-handler))
+  (handler {:request-method :get :uri "/ping"}))

@@ -15,8 +15,8 @@
              :let [src  (str "config" fs/file-separator f ".example.edn")
                    dest (str "config" fs/file-separator f ".edn")]]
        (if (fs/exists? dest)
-         (prn (str dest " already exists, skipping"))
-         (do (prn (str"copying " src " to " dest))
+         (println "skipping" dest "- already exists")
+         (do (println "copying" src "to" dest)
              (fs/copy src dest)))))}
 
   dev

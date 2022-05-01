@@ -1,11 +1,21 @@
-{;; secrets are stored in a (gitignored) file secrets.edn
- ;; see secrets.edn.example for a template
- :secrets #include "secrets.edn"
+{:secrets #include "secrets.edn"
+ :overrides #include "overrides.edn"
 
  ;; values here are merged directly into components
+ ;; any value may be overridden in `overrides.edn`
  :components
- {:http-server
-  {:port #or [#env HTTP_PORT 3000]}
+ #deep-merge
+  [{:http-server
+    {:port 3000
 
-  :xtdb
-  {}}}
+     ;; two available options:
+     ;; - :static  - the handler is built once when the server starts
+     ;; - :dynamic - the handler is built on every request
+     ;; :dynamic is intended for local development, to allow fast
+     ;; REPL flow without having to rebuild the system.
+     :handler-type #profile {:default :static
+                             :local   :dynamic}}
+
+    :xtdb
+    {}}
+   #ref [:overrides :components]]}

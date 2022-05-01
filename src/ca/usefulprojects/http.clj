@@ -4,25 +4,34 @@
    [ring.adapter.jetty :as jetty]
    [taoensso.timbre :as log]))
 
-(defn start-jetty [port handler]
-  (log/info "Starting HTTPServer...")
+(defn start [port handler]
+  (log/info "Starting HTTPServer on port" port "...")
   (jetty/run-jetty handler {:port port :join? false}))
 
-(defrecord HTTPServer [handler port http]
+(defn stop [server]
+  (log/info "Stopping HTTPServer...")
+  (.stop server))
+
+(defn dynamic-handler
+  "Creates a ring handler that will call `make-handler` on every request.
+  Intended for local development."
+  [make-handler]
+  (fn
+    ([req] ((make-handler) req))
+    ([request respond raise] ((make-handler) request respond raise))))
+
+(defrecord HTTPServer [make-handler port handler-type http handler]
   component/Lifecycle
 
   (start [component]
     (if (some? (:http component))
       component
-      (do
-        (log/info "Starting HTTPServer on port" port "...")
-        (assoc component :http (start-jetty port handler)))))
+      (let [handler (if (= handler-type :dynamic)
+                      (dynamic-handler make-handler)
+                      (make-handler))]
+        (assoc component :http (start port handler)))))
 
   (stop [{:keys [http] :as component}]
     (when http
-      (log/info "Stopping HTTPServer...")
-      (.stop http))
+      (stop http))
     component))
-
-(defn make-server [_config handler]
-  (map->HTTPServer {:handler handler}))

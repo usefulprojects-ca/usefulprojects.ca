@@ -4,14 +4,14 @@
    [taoensso.timbre :as log]
 
    [ca.usefulprojects
-    [app :as app]
     [config :as config]
+    [handler :as handler]
     [http :as http]
     [xtdb :as xtdb]]))
 
 (defn make-system []
   (component/system-map
-    :http-server (http/make-server {} #'app/app)
+    :http-server (http/map->HTTPServer {:make-handler handler/make-handler})
     :xtdb (xtdb/make-node {})))
 
 (defn configure-system
