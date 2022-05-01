@@ -1,14 +1,16 @@
 {:paths ["src"]
+ :resource-paths ["resources"]
 
  :deps
- {org.clojure/clojure {:mvn/version "1.11.1"}
+ {org.clojure/clojure        {:mvn/version "1.11.1"}
 
-  com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"}
+  aero/aero                  {:mvn/version "1.1.6"}
+  com.fzakaria/slf4j-timbre  {:mvn/version "0.3.21"}
   com.stuartsierra/component {:mvn/version "1.1.0"}
-  com.taoensso/timbre {:mvn/version "5.2.1"}
-  com.xtdb/xtdb-core {:mvn/version "1.20.0"}
-  metosin/reitit {:mvn/version "0.5.18"}
-  ring/ring-jetty-adapter {:mvn/version "1.9.5"}}
+  com.taoensso/timbre        {:mvn/version "5.2.1"}
+  com.xtdb/xtdb-core         {:mvn/version "1.20.0"}
+  metosin/reitit             {:mvn/version "0.5.18"}
+  ring/ring-jetty-adapter    {:mvn/version "1.9.5"}}
 
  :aliases
  {:dev

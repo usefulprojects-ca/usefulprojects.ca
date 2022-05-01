@@ -1,0 +1,11 @@
+{;; secrets are stored in a (gitignored) file secrets.edn
+ ;; see secrets.edn.example for a template
+ :secrets #include "secrets.edn"
+
+ ;; values here are merged directly into components
+ :components
+ {:http-server
+  {:port #or [#env HTTP_PORT 3000]}
+
+  :xtdb
+  {}}}

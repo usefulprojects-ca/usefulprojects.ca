@@ -4,19 +4,19 @@
    [ring.adapter.jetty :as jetty]
    [taoensso.timbre :as log]))
 
-(defn start-jetty [_config handler]
+(defn start-jetty [port handler]
   (log/info "Starting HTTPServer...")
-  (jetty/run-jetty handler {:port 3000 :join? false}))
+  (jetty/run-jetty handler {:port port :join? false}))
 
-(defrecord HTTPServer [handler http]
+(defrecord HTTPServer [handler port http]
   component/Lifecycle
 
   (start [component]
     (if (some? (:http component))
       component
       (do
-        (log/info "Starting HTTPServer...")
-        (assoc component :http (start-jetty {} handler)))))
+        (log/info "Starting HTTPServer on port" port "...")
+        (assoc component :http (start-jetty port handler)))))
 
   (stop [{:keys [http] :as component}]
     (when http

@@ -7,8 +7,8 @@
 (defn restart []
   (when @system
     (up/stop @system))
-  (reset! system (up/start)))
+  (reset! system (up/start :local)))
 
 (comment
-  (up/stop @system)
-  (restart))
+  (restart)
+  (up/stop @system))
