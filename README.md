@@ -5,22 +5,18 @@
 This code serves two purposes:
 
 - Provide the site powering usefulprojects.ca
-- Provide an environment for testing technologies and exercising Clojure 
-development.
+- Provide an environment for testing technologies and approaches.
 
-Due to the second purpose, the code is considerable overkill for the first 
-purpose.
-
+Due to the latter, the code within is _considerable_ overkill for former.
 
 ## Configuration
 ### Configuration
 
 Configuration is handled using [aero](https://github.com/juxt/aero).
 
-Configuration files are stored in the `/config` directory and span three files.
-
-Only `config.edn` is checked into source control; example templates are provided
-for the others.
+There are three configuration files, stored in `/config`. 
+Only `config.edn` is checked into source control; 
+example templates are provided for the others.
 
 #### config.edn
 
@@ -52,7 +48,7 @@ An example is provided, see `config/overrides.example.edn`.
 ## Development
 ### Dependencies
 
-For development or running locally, ensure the following are available:
+For local development, ensure the following are installed on your system:
 - [babashka](https://github.com/babashka/babashka#installation)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)

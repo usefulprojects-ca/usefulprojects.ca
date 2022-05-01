@@ -1,6 +1,7 @@
 {:paths ["dev/src"]
  :tasks
- {test
+ {:requires ([babashka.fs :as fs])
+  test
   {:doc "NOT YET IMPLEMENTED Runs tests"}
 
   build-dockerfiles
@@ -8,8 +9,15 @@
 
   init-config
   {:doc "Create base config files from examples"
-   :task (do (shell "cp config/overrides.example.edn config/overrides.edn")
-             (shell "cp config/secrets.example.edn config/secrets.edn"))}
+   :task
+   (do
+     (doseq [f ["overrides" "secrets"]
+             :let [src  (str "config" fs/file-separator f ".example.edn")
+                   dest (str "config" fs/file-separator f ".edn")]]
+       (if (fs/exists? dest)
+         (prn (str dest " already exists, skipping"))
+         (do (prn (str"copying " src " to " dest))
+             (fs/copy src dest)))))}
 
   dev
   {:doc "Starts the development environment dependencies."
@@ -30,6 +38,4 @@
    :task (clojure (str "-M"
                        (str/join (interleave (repeat ":")
                                              (concat ["dev" "test"]
-                                                     *command-line-args*)))))}
-
-  }}
+                                                     *command-line-args*)))))}}}
