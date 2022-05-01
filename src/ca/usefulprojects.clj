@@ -14,7 +14,9 @@
     :http-server (http/make-server {} #'app/app)
     :xtdb (xtdb/make-node {})))
 
-(defn configure-system [system profile]
+(defn configure-system
+  "Merges configuration data into a constructed (but not yet started) system."
+  [system profile]
   (let [config (config/read-config profile)]
     (merge-with merge system (:components config))))
 

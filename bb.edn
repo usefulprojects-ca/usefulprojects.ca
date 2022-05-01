@@ -1,7 +1,15 @@
 {:paths ["dev/src"]
  :tasks
  {test
-  {:doc "Runs tests"}
+  {:doc "NOT YET IMPLEMENTED Runs tests"}
+
+  build-dockerfiles
+  {:doc "NOT YET IMPLEMENTED Constructs Dockerfile and docker-compose.yml"}
+
+  init-config
+  {:doc "Create base config files from examples"
+   :task (do (shell "cp config/overrides.example.edn config/overrides.edn")
+             (shell "cp config/secrets.example.edn config/secrets.edn"))}
 
   dev
   {:doc "Starts the development environment dependencies."
