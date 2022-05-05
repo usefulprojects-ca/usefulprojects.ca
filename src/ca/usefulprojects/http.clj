@@ -1,6 +1,6 @@
 (ns ca.usefulprojects.http
   (:require
-   [com.stuartsierra.component :as component]
+   [integrant.core :as ig]
    [ring.adapter.jetty :as jetty]
    [taoensso.timbre :as log]))
 
@@ -9,29 +9,23 @@
   (jetty/run-jetty handler {:port port :join? false}))
 
 (defn stop [server]
-  (log/info "Stopping HTTPServer...")
-  (.stop server))
+  (when (= (class server) org.eclipse.jetty.server.Server)
+    (log/info "Stopping HTTPServer...")
+    (.stop server)))
 
-(defn dynamic-handler
-  "Creates a ring handler that will call `make-handler` on every request.
+(defn wrap-handler-rebuild-middleware
+  "Creates a ring handler that will call `make-handler-fn` on every request.
   Intended for local development."
-  [make-handler]
+  [make-handler-fn]
   (fn
-    ([req] ((make-handler) req))
-    ([request respond raise] ((make-handler) request respond raise))))
+    ([req] ((make-handler-fn) req))
+    ([request respond raise] ((make-handler-fn) request respond raise))))
 
-(defrecord HTTPServer [make-handler port handler-type http handler]
-  component/Lifecycle
+(defmethod ig/init-key ::jetty [_k {:keys [port make-handler-fn
+                                           rebuild-handler-on-request]}]
+  (start port (if rebuild-handler-on-request
+                (wrap-handler-rebuild-middleware make-handler-fn)
+                (make-handler-fn))))
 
-  (start [component]
-    (if (some? (:http component))
-      component
-      (let [handler (if (= handler-type :dynamic)
-                      (dynamic-handler make-handler)
-                      (make-handler))]
-        (assoc component :http (start port handler)))))
-
-  (stop [{:keys [http] :as component}]
-    (when http
-      (stop http))
-    component))
+(defmethod ig/halt-key! ::jetty [_k server]
+  (stop server))

@@ -2,35 +2,41 @@
   (:require
    [aero.core :as aero]
    [clojure.pprint :as pprint]
-   [clojure.walk :as walk]))
+   [clojure.walk :as walk]
+   [integrant.core :as ig]))
 
-(defmethod aero/reader 'deep-merge
-  [_opts _tag values]
-  (apply merge-with (cons merge values)))
+(defmethod aero/reader 'ig/ref [_opts _tag value]
+  (ig/ref value))
 
-;; a record is used primarily for simple overriding of print/pprint behaviour
-(defrecord Config [secrets overrides])
+;; a record is used to enable simple overriding of print/pprint behaviour
+(defrecord Config [])
 
 (defn read-config [profile]
   (map->Config (aero/read-config "config/config.edn" {:profile profile})))
 
 (comment
-  (read-config :local)
-  (type (read-config :local))
-  (class (read-config :local)))
+  (read-config :local))
 
-(defn- tree-leaves [t]
+(defn ->ig-conf
+  "Returns configuration suitable for feeding to integrant."
+  [config]
+  (into {} (dissoc config :secrets :overrides)))
+
+(comment
+  (->ig-conf (read-config :local)))
+
+(defn- config-values [t]
   (let [branch? #(or (sequential? %) (map? %))]
     (remove branch? (tree-seq branch? #(if (map? %) (vals %) %) t))))
 
 (comment
-  (tree-leaves (read-config :local)))
+  (config-values (read-config :local)))
 
 (defn sanitize
   "Censors any secrets in config to make it suitable for printing.
   Returns a Map instead of a Config record."
   [config]
-  (let [secrets (-> (:secrets config) tree-leaves set)]
+  (let [secrets (-> (:secrets config) config-values set)]
     (walk/postwalk #(if (contains? secrets %) "*****" %) (into {} config))))
 
 (comment

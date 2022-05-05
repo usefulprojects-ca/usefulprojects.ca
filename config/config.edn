@@ -1,21 +1,15 @@
-{:secrets #include "secrets.edn"
+{;; secrets and overrides are included to allow for referencing
+ ;; these keys will be removed when the config is read
+ :secrets #include "secrets.edn"
  :overrides #include "overrides.edn"
 
- ;; values here are merged directly into components
- ;; any value may be overridden in `overrides.edn`
- :components
- #deep-merge
-  [{:http-server
-    {:port 3000
+ :ca.usefulprojects.handler/make-handler-fn {}
 
-     ;; two available options:
-     ;; - :static  - the handler is built once when the server starts
-     ;; - :dynamic - the handler is built on every request
-     ;; :dynamic is intended for local development, to allow fast
-     ;; REPL flow without having to rebuild the system.
-     :handler-type #profile {:default :static
-                             :local   :dynamic}}
+ :ca.usefulprojects.http/jetty
+ {:port 3000
 
-    :xtdb
-    {}}
-   #ref [:overrides :components]]}
+  :make-handler-fn #ig/ref :ca.usefulprojects.handler/make-handler-fn
+
+  ;; set to true to rebuild the handler on each request, useful for development
+  :rebuild-handler-on-request #profile {:default false, :local true}
+  }}
