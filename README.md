@@ -5,9 +5,10 @@
 This code serves two purposes:
 
 - Provide the site powering usefulprojects.ca
-- Provide an environment for testing technologies and approaches.
+- Provide an environment for testing technologies and approaches for building
+Clojure based web services.
 
-Due to the latter, the code within is _considerable_ overkill for former.
+Due to the latter, the code within is *_considerable_* overkill for former.
 
 ## Configuration
 ### Configuration
@@ -91,9 +92,9 @@ bb repl eastwood reveal my-idiosyncratic-alias
 
 Once started, use `(dev/restart)` to (re)start a development system.
 
-Currently after modifying routes/handlers, re-evaluating 
-`ca.usefulprojects.app/app` is required, but a full system restart is not needed.
-
+The `:local` configuration profile used by the REPL system will configure the 
+system such that individual page handlers will be picked up upon being evaluated;
+no full system reset is needed.
 
 ## Deployment
 
