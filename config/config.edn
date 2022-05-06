@@ -3,12 +3,12 @@
  :secrets #include "secrets.edn"
  :overrides #include "overrides.edn"
 
- :ca.usefulprojects.handler/make-handler-fn {}
+ :ca.usefulprojects.router/router {}
 
  :ca.usefulprojects.http/jetty
  {:port 3000
 
-  :make-handler-fn #ig/ref :ca.usefulprojects.handler/make-handler-fn
+  :make-handler-fn #ig/ref :ca.usefulprojects.router/router
 
   ;; set to true to rebuild the handler on each request, useful for development
   :rebuild-handler-on-request #profile {:default false, :local true}
