@@ -48,6 +48,9 @@
 (defmethod pprint/simple-dispatch Config [x]
   (pprint/pprint (sanitize x)))
 
+;; TODO: print sanitizing works if we're logging a config directly, but further
+;; work is needed at the logging level to check for secret leaks
+
 (comment
   (with-out-str (print (read-config :local)))
   (with-out-str (pprint/pprint (read-config :local))))

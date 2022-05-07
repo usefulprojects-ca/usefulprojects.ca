@@ -3,6 +3,16 @@
  :secrets #include "secrets.edn"
  :overrides #include "overrides.edn"
 
+ :ca.usefulprojects.xtdb/node
+ {:db-spec {:host "localhost"
+            :port 5000
+            :dbname #profile {:local "repl"
+                              :test "test"
+                              :prod "prod"}
+            :user "pguser"
+            :password #ref [:secrets :postgres-password]}
+  :pool-opts {}}
+
  :ca.usefulprojects.router/router {}
 
  :ca.usefulprojects.http/jetty
@@ -10,6 +20,4 @@
 
   :make-handler-fn #ig/ref :ca.usefulprojects.router/router
 
-  ;; set to true to rebuild the handler on each request, useful for development
-  :rebuild-handler-on-request #profile {:default false, :local true}
-  }}
+  :rebuild-handler-on-request #profile {:default false, :local true}}}
