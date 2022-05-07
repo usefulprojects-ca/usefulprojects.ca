@@ -23,21 +23,22 @@
                     :color "#444"
                     :background-color "#ecegef"
                     :padding "0 10px"}]
+            [:header {:border-bottom "1px dashed #444"}]
             [:h1 :h2 :h3 {:line-height 1.2}])]]
      [:body
       [:header
        [:h1 "&gt; usefulprojects.ca"]
-       [:aside [:em "The humble digital home of Robert Frederick Warner"]]]
+       [:aside [:em "The humble online home of Robert Frederick Warner"]]]
       content]]))
 
 (defn home [req]
   {:status 200
    :body
    (page req
+         [:p [:em "Some content that will eventually appear here..."]]
          [:ul
-          [:li "I help companies build useful projects"]
-          [:li "I enjoy painting"]
-          [:li "Very occasionally, my code makes it onto github"]
+          [:li "A summary of my journey as a solver of problems using software"]
+          [:li "Some of my paintings and artwork"]
           [:li "Talks and books I've learned from"]
           [:li "Cat tax"]])})
 
