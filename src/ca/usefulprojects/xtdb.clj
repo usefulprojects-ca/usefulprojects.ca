@@ -1,10 +1,10 @@
 (ns ca.usefulprojects.xtdb
   (:require
+   [clojure.pprint :as pprint]
    [integrant.core :as ig]
-   [xtdb.api :as xt]
-   [xtdb.node :as xt.node]
    [taoensso.timbre :as log]
-   [clojure.pprint :as pprint])
+   [xtdb.api :as xt]
+   [xtdb.node :as xt.node])
   (:import
    (xtdb.node XtdbNode)))
 
@@ -23,6 +23,7 @@
                :xtdb/document-store
                {:xtdb/module     'xtdb.jdbc/->document-store
                 :connection-pool :xtdb.jdbc/connection-pool}})
+        ;; TODO: handle timeout exception on xt/sync
         f (future (xt/sync node))]
     (log/info "Waiting for XTDB tx sync...")
     (while (not (realized? f))
