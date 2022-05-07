@@ -11,5 +11,15 @@
   (reset! system (up/start (config/read-config :local))))
 
 (comment
+  ;; evaluate this on startup if you are using reveal
+  (do
+    (require '[vlaaad.reveal :as r]
+             'xtdb.node)
+    (import '(xtdb.node XtdbNode))
+
+    (r/defstream XtdbNode [_]
+      (r/raw-string "<XtdbNode>"))))
+
+(comment
   (restart)
   (up/stop! @system))

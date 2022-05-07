@@ -2,7 +2,11 @@
   (:require
    [integrant.core :as ig]
    [xtdb.api :as xt]
-   [taoensso.timbre :as log]))
+   [xtdb.node :as xt.node]
+   [taoensso.timbre :as log]
+   [clojure.pprint :as pprint])
+  (:import
+   (xtdb.node XtdbNode)))
 
 (defn start [{:keys [db-spec pool-opts]}]
   (log/info "Starting XTDB node...")
@@ -35,3 +39,9 @@
 
 (defmethod ig/init-key ::node [_k opts] (start opts))
 (defmethod ig/halt-key! ::node [_k node] (halt! node))
+
+(defmethod print-method XtdbNode [_x ^java.io.Writer w]
+  (.write w "<XtdbNode>"))
+
+(defmethod pprint/simple-dispatch XtdbNode [_x]
+  (print "<XtdbNode>"))
