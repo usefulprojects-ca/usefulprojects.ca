@@ -1,7 +1,6 @@
-{;; secrets and overrides are included to allow for referencing
- ;; these keys will be removed when the config is read
- :secrets #include "secrets.edn"
- :overrides #include "overrides.edn"
+{;; secrets and environment are included to allow for referencing
+ :secrets     #include "secrets.edn"
+ :environment #include "environment.edn"
 
  :ca.usefulprojects.xtdb/node
  {:db-spec {:host "localhost"

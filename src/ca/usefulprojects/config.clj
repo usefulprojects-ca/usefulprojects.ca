@@ -20,7 +20,7 @@
 (defn ->ig-conf
   "Returns configuration suitable for feeding to integrant."
   [config]
-  (into {} (dissoc config :secrets :overrides)))
+  (into {} (dissoc config :secrets :environment)))
 
 (comment
   (->ig-conf (read-config :local)))

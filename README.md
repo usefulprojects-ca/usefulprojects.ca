@@ -8,7 +8,7 @@ This code serves two purposes:
 - Provide an environment for testing technologies and approaches for building
 Clojure based web services.
 
-Due to the latter, the code within is ***considerable*** overkill for former.
+Due to the latter, code that may be overkill for the former is welcome. 
 
 ## Configuration
 ### Configuration
@@ -37,14 +37,17 @@ This file is source controlled.
 Contains any sensitive configuration values. 
 This file is _not_ source controlled.
 
+A best effort is made to prevent values provided in this file from being leaked 
+in e.g. log files or error messages.
+
 An example is provided, see `config/secrets.example.edn`.
 
-#### overrides.edn
+#### environment.edn
 
-Contains any host specific overrides needed.
+Contains any environment specific overrides needed.
 This file is _not_ source controlled.
 
-An example is provided, see `config/overrides.example.edn`.
+An example is provided, see `config/environment.example.edn`.
 
 ## Development
 ### Dependencies
@@ -96,6 +99,26 @@ The `:local` configuration profile used by the REPL system will configure the
 system such that individual page handlers will be picked up upon being evaluated.
 No full system reset is needed. New development should support this workflow.
 
+#### Code style
+
+TODO Write code style docs and explore automated linting options
+
 ## Deployment
 
-Coming soon!
+TODO Setup deployment
+
+## Decision Record
+
+TODO Flesh this section out
+
+### Stateful component handling: Integrant
+
+### Routing: Reitit
+
+### Configuration: Aero
+
+### Primary datastore: XTDB
+
+### Frontend: HTMX / Hyperscript
+
+### Data validation: Malli (mostly)

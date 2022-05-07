@@ -11,7 +11,7 @@
   {:doc "Create base config files from examples"
    :task
    (do
-     (doseq [f ["overrides" "secrets"]
+     (doseq [f ["environment" "secrets"]
              :let [src  (str "config" fs/file-separator f ".example.edn")
                    dest (str "config" fs/file-separator f ".edn")]]
        (if (fs/exists? dest)
