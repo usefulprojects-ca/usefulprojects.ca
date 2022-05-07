@@ -15,6 +15,7 @@
   (do
     (require '[vlaaad.reveal :as r]
              'xtdb.node)
+    #_{:clj-kondo/ignore [:unused-import]}
     (import '(xtdb.node XtdbNode))
 
     (r/defstream XtdbNode [_]
