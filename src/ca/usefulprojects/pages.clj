@@ -3,7 +3,7 @@
    [garden.core :refer [css]]
    [hiccup.core :refer [html]]))
 
-(defn page [_req content]
+(defn page [_req & content]
   (html
     [:html
      [:head
@@ -33,9 +33,13 @@
 (defn home [req]
   {:status 200
    :body
-   (page req [:ul (for [[title url] [["contact" "mailto:robert@usefulprojects.ca"]
-                                     ["github" "https://github.com/robertfw/"]]]
-                    [:li [:a {:href url} title]])])})
+   (page req
+         [:ul
+          [:li "I help companies build useful projects"]
+          [:li "I enjoy painting"]
+          [:li "Very occasionally, my code makes it onto github"]
+          [:li "Talks and books I've learned from"]
+          [:li "Cat tax"]])})
 
 (defn routes []
   [["/" {:name ::home
