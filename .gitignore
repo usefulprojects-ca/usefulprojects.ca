@@ -1,4 +1,5 @@
 .cpcache
+.log
 .clj-kondo/.cache
 secrets.edn
 overrides.edn

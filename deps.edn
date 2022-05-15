@@ -20,7 +20,8 @@
 
  :aliases
  {:dev
-  {:extra-paths ["dev/src"]}
+  {:extra-paths ["dev/src"]
+   :extra-deps {hawk/hawk {:mvn/version "0.2.11"}}}
 
   :test
   {}}}

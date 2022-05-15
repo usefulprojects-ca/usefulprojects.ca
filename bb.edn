@@ -34,6 +34,8 @@
 
   repl
   {:doc "Start a REPL. May provide aliases to use, .e.g `bb repl my-alias1 my-alias2"
+   ;; TODO: should probably just make this pass through instead of being fancy with aliases
+   ;; this would allow more control
    :requires ([clojure.string :as str])
    :task (clojure (str "-M"
                        (str/join (interleave (repeat ":")

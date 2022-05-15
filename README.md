@@ -56,6 +56,7 @@ For local development, ensure the following are installed on your system:
 - [babashka](https://github.com/babashka/babashka#installation)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
+- [tailwindcss](https://github.com/tailwindlabs/tailwindcss/releases/latest)
 
 ### Tasks
 
@@ -99,6 +100,18 @@ The `:local` configuration profile used by the REPL system will configure the
 system such that individual page handlers will be picked up upon being evaluated.
 No full system reset is needed. New development should support this workflow.
 
+#### Tailwind Compilation
+
+Run `(dev/start-tailwind-compile-watcher)` to start a file watcher that will
+recompile the tailwind css upon any file changes.
+
+The tailwindcss standalone compiler (which you must install yourself) comes with
+the official tailwind plugins included.
+
+Tailwind will scan all source files for mentions of tailwind classes. This means
+that classes _must_ be written explicitly. Classes that are constructed
+dynamically will not be picked up and will not end up in the compiled css.
+
 #### Code style
 
 TODO Write code style docs and explore automated linting options
@@ -121,4 +134,6 @@ TODO Flesh this section out
 
 ### Frontend: HTMX / Hyperscript
 
-### Data validation: Malli (mostly)
+### Data validation: Malli
+
+### CSS Framework: Tailwind
