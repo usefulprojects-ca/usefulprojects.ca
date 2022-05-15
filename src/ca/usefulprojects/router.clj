@@ -6,9 +6,13 @@
    [ca.usefulprojects.pages :as pages]))
 
 (defn request-logging-middleware [handler]
-  (fn [req]
-    (log/debug (select-keys req [:request-method :uri]))
-    (handler req)))
+  (fn
+    ([req]
+     (log/debug (select-keys req [:request-method :uri]))
+     (handler req))
+    ([req respond raise]
+     (log/debug (select-keys req [:request-method :uri]))
+     (handler req respond raise))))
 
 (defn make-router []
   (ring/ring-handler
