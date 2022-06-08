@@ -29,7 +29,7 @@
          [:ul
           [:li "A summary of my journey as a software craftsman"]
           [:li "An index of useful talks and books with notes on what I found valuable"]
-          [:li "An attempt to distill my approach to crafting software systems"]
+          [:li "A distillation my approach to crafting software systems"]
           [:li "A selection of my artistic output"]])})
 
 (defn routes []

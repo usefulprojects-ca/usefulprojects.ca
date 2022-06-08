@@ -14,7 +14,8 @@
 
 (defn compile-tailwind []
   (let [result (shell/sh "tailwindcss"
-                         "-c" "tailwind.config.js"
+                         "-i" "resources/tailwind/tailwind.css"
+                         "-c" "resources/tailwind/config.js"
                          "-o" "resources/public/main.css"
                          "--minify")]
     ;; Tailwind may kick out warnings we want to see so can't rely on exit code
@@ -44,11 +45,11 @@
 
 (comment
   (stop-tailwind-auto-compiler)
-  (start-tailwind-auto-compiler)
+  (start-tailwind-auto-compiler))
 
 ;; --------------------------------------------------------------------- system
 
-  (defonce system (atom nil)))
+(defonce system (atom nil))
 
 (defn restart []
   (when @system
