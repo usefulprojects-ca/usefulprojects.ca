@@ -33,6 +33,27 @@
     (log/info "XTDB startup complete.")
     node))
 
+(comment
+  (require '[dev :refer [system]])
+
+  (def node (::node @system))
+
+  (xt/submit-tx node [[::xt/put {:xt/id 1 :name "funkadelic"}]
+                      [::xt/put {:xt/id 2 :name "slartibartfast"}]])
+
+  (xt/sync node)
+
+  (xt/q (xt/db node)
+        '{:find  [id name]
+          :where [[x :xt/id id]
+                  [x :name name]]})
+
+  (xt/q (xt/db node)
+        '{:find  [id]
+          :where [[id :name name]]
+          :in    [name]}
+        "slartibartfast"))
+
 (defn halt! [node]
   (when (instance? java.io.Closeable node)
     (log/info "Stopping XTDB node...")

@@ -1,7 +1,7 @@
 (ns ca.usefulprojects.pages
   (:require
-   [garden.core :refer [css]]
-   [hiccup.core :refer [html]]))
+   [hiccup.core :refer [html]]
+   [xtdb.api :as xt]))
 
 (defn page [_req & content]
   (html
@@ -17,7 +17,7 @@
       [:link {:rel "stylesheet" :href "/main.css"}]]
      [:body
       [:header
-       [:h1 "&gt; usefulprojects.ca"]
+       [:h1.font-extrabold "&gt; usefulprojects.ca"]
        [:aside [:em "The humble online home of Robert Frederick Warner"]]]
       content]]))
 
@@ -32,6 +32,20 @@
           [:li "A distillation my approach to crafting software systems"]
           [:li "A selection of my artistic output"]])})
 
+(defn xtdb-demo [req]
+  (let [node (:xtdb req)
+        data (xt/q (xt/db node)
+                   '{:find  [id name]
+                     :where [[x :xt/id id]
+                             [x :name name]]})]
+    {:status 200
+     :body
+     (page req
+           [:p data])}))
+
 (defn routes []
   [["/" {:name ::home
-         :get home}]])
+         :get  home}]
+   ["/xtdb-demo" {:name ::xtdb-demo
+                  :get  xtdb-demo
+                  :middleware [[:provide :xtdb]]}]])

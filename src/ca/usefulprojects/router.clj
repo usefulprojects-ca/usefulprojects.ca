@@ -14,16 +14,27 @@
      (log/debug (select-keys req [:request-method :uri]))
      (handler req respond raise))))
 
-(defn make-router []
-  (ring/ring-handler
-    (ring/router (pages/routes)
-                 {:data {:middleware [request-logging-middleware]}})
-    (ring/routes
-      (ring/create-file-handler {:path "/" :root "resources/public/"})
-      (ring/create-default-handler))))
+(defn provide-middleware [system handler & ks]
+  (let [provided (select-keys system ks)
+        provide  (fn [req] (merge req provided))]
+    (fn
+      ([req]               (handler (provide req)))
+      ([req respond raise] (handler (provide req) respond raise)))))
 
-(defmethod ig/init-key ::router [_k _v] #'make-router)
+(defn make-router [provided-components]
+  (ring/ring-handler
+   (ring/router
+    (pages/routes)
+    {:data {:middleware [request-logging-middleware]}
+     :reitit.middleware/registry
+     {:provide (partial provide-middleware provided-components)}})
+   (ring/routes
+    (ring/create-file-handler {:path "/" :root "resources/public/"})
+    (ring/create-default-handler))))
+
+(defmethod ig/init-key ::router [_k v] (partial make-router (:provides v)))
 
 (comment
-  ((make-router) {:request-method :get :uri "/"})
-  ((make-router) {:request-method :get :uri "/favicon.ico"}))
+  ((make-router nil) {:request-method :get :uri "/"})
+  ((make-router nil) {:request-method :get :uri "/favicon.ico"})
+  ((make-router nil) {:request-method :get :uri "/xtdb-demo"}))
