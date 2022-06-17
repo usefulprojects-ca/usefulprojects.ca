@@ -39,7 +39,7 @@
   (partial make-handler (:provides v)))
 
 (comment
-  ((make-router nil) {:request-method :get :uri "/"})
-  ((make-router nil) {:request-method :get :uri "/favicon.ico"})
-  ((make-router nil) {:request-method :get :uri "/xtdb-demo"})
-  ((make-router nil) {:request-method :get :uri "/auth/login"}))
+  ((make-handler nil) {:request-method :get :uri "/"})
+  ((make-handler nil) {:request-method :get :uri "/favicon.ico"})
+  ((make-handler nil) {:request-method :get :uri "/xtdb-demo"})
+  ((make-handler nil) {:request-method :get :uri "/auth/login"}))
