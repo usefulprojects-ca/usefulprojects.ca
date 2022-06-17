@@ -1,11 +1,13 @@
-(ns ca.usefulprojects.router
+(ns ca.usefulprojects.handler
   (:require
-   [integrant.core :as ig]
+   [ca.usefulprojects
+    [auth :as auth]
+    [pages :as pages]]
+   [integrant.core :as integrant]
    [reitit.ring :as ring]
-   [taoensso.timbre :as log]
-   [ca.usefulprojects.pages :as pages]))
+   [taoensso.timbre :as log]))
 
-(defn request-logging-middleware [handler]
+(defn log-request-middleware [handler]
   (fn
     ([req]
      (log/debug (select-keys req [:request-method :uri]))
@@ -14,27 +16,30 @@
      (log/debug (select-keys req [:request-method :uri]))
      (handler req respond raise))))
 
-(defn provide-middleware [system handler & ks]
+(defn provide-component-middleware [system handler & ks]
   (let [provided (select-keys system ks)
         provide  (fn [req] (merge req provided))]
     (fn
       ([req]               (handler (provide req)))
       ([req respond raise] (handler (provide req) respond raise)))))
 
-(defn make-router [provided-components]
+(defn make-handler [components]
   (ring/ring-handler
-   (ring/router
-    (pages/routes)
-    {:data {:middleware [request-logging-middleware]}
+   (ring/router (into [] cat [(pages/routes)
+                              (auth/routes)])
+    {:data {:middleware [:log-request]}
      :reitit.middleware/registry
-     {:provide (partial provide-middleware provided-components)}})
+     {:provide (partial provide-component-middleware components)
+      :log-request log-request-middleware}})
    (ring/routes
     (ring/create-file-handler {:path "/" :root "resources/public/"})
     (ring/create-default-handler))))
 
-(defmethod ig/init-key ::router [_k v] (partial make-router (:provides v)))
+(defmethod integrant/init-key ::make-handler [_k v]
+  (partial make-handler (:provides v)))
 
 (comment
   ((make-router nil) {:request-method :get :uri "/"})
   ((make-router nil) {:request-method :get :uri "/favicon.ico"})
-  ((make-router nil) {:request-method :get :uri "/xtdb-demo"}))
+  ((make-router nil) {:request-method :get :uri "/xtdb-demo"})
+  ((make-router nil) {:request-method :get :uri "/auth/login"}))

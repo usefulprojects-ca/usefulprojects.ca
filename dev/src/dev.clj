@@ -64,6 +64,8 @@
 
 (comment
   ;; evaluate this on startup if you are using reveal
+  ;; TODO it would be nice to conditionally execute this if reveal is present
+  ;; in user.clj, to remove the manual step.
   (do
     (require '[vlaaad.reveal :as r]
              'xtdb.node)

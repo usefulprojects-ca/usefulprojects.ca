@@ -12,12 +12,10 @@
             :password #ref [:secrets :postgres-password]}
   :pool-opts {}}
 
- :ca.usefulprojects.router/router
+ :ca.usefulprojects.handler/make-handler
  {:provides {:xtdb #ig/ref :ca.usefulprojects.xtdb/node}}
 
  :ca.usefulprojects.http/jetty
  {:port 3000
-
-  :make-handler-fn #ig/ref :ca.usefulprojects.router/router
-
+  :make-handler-fn #ig/ref :ca.usefulprojects.handler/make-handler
   :rebuild-handler-on-request #profile {:default false, :local true}}}

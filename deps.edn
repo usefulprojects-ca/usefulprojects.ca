@@ -1,5 +1,6 @@
 {:paths ["src"]
  :resource-paths ["resources"]
+ :jvm-opts  ["-XX:-OmitStackTraceInFastThrow"]
 
  :deps
  {org.clojure/clojure        {:mvn/version "1.11.1"}
@@ -24,4 +25,4 @@
    :extra-deps {hawk/hawk {:mvn/version "0.2.11"}}}
 
   :test
-  {}}}
+  {:extra-paths ["test/src"]}}}
