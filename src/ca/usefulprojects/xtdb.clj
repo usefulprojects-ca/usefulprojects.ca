@@ -39,7 +39,8 @@
   (def node (::node @system))
 
   (xt/submit-tx node [[::xt/put {:xt/id 1 :name "funkadelic"}]
-                      [::xt/put {:xt/id 2 :name "slartibartfast"}]])
+                      [::xt/put {:xt/id 2 :name "slartibartfast"}]
+                      [::xt/put {:xt/id 3 :name "shoulder of orion"}]])
 
   (xt/sync node)
 

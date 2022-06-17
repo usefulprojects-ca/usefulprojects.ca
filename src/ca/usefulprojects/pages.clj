@@ -33,15 +33,15 @@
           [:li "A selection of my artistic output"]])})
 
 (defn xtdb-demo [req]
-  (let [node (:xtdb req)
-        data (xt/q (xt/db node)
+  (let [data (xt/q (-> req :xtdb xt/db)
                    '{:find  [id name]
+                     :keys  [id name]
                      :where [[x :xt/id id]
-                             [x :name name]]})]
+                             [x :name name]]
+                     :order-by [[name :asc]]})]
     {:status 200
      :body
-     (page req
-           [:p data])}))
+     (page req [:ul (for [{:keys [id name]} data] [:li id " " name])])}))
 
 (defn routes []
   [["/" {:name ::home
