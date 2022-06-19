@@ -1,8 +1,8 @@
 (ns ca.usefulprojects.pages
   (:require
-   [xtdb.api :as xt]
    [ca.usefulprojects.templates :as templates]
-   [integrant.core :as integrant]))
+   [integrant.core :as integrant]
+   [xtdb.api :as xt]))
 
 (defn home [req]
   {:status 200
@@ -25,14 +25,15 @@
                      :order-by [[name :asc]]})]
     {:status 200
      :body
-     (templates/page req [:ul (for [{:keys [id name]} data] [:li id " " name])])}))
+     (templates/page req [[:ul (for [{:keys [id name]} data] [:li id " " name])]])}))
 
-(defn routes []
+(defn routes [deps]
   [["/" {:name ::home
          :get  home
          :middleware [:hiccup]}]
    ["/xtdb-demo" {:name ::xtdb-demo
                   :get  xtdb-demo
-                  :middleware [[:provide :xtdb]]}]])
+                  :middleware [[:hiccup] [:merge deps]]}]])
 
-(defmethod integrant/init-key ::routes [_k _v] #'routes)
+(defmethod integrant/init-key ::routes [_k v]
+  #(routes v))
