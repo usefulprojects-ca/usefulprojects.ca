@@ -1,6 +1,6 @@
 (ns ca.usefulprojects.templates)
 
-(defn page [_req content]
+(defn page [_req body]
   [:html
    [:head
     [:meta {:charset "utf-8"}]
@@ -11,5 +11,16 @@
     [:link {:rel "icon" :type "image/png" :sizes "16x16" :href "/favicon-16x16.png"}]
     [:link {:rel "manifest" :href "/site.webmanifest"}]
     [:link {:rel "stylesheet" :href "/main.css"}]]
-   [:body
-    (into [:header [:h1.font-extrabold "&gt; usefulprojects.ca"]] content)]])
+   (into [:body.m-8] body)])
+
+(defn standard [req main]
+  (page req
+        [[:header.mb-4
+          [:h1.font-extrabold "&gt; usefulprojects.ca"]
+          [:p "The humble digital home of Robert Warner"]]
+         [:nav
+          [:ul
+           [:li "Writings"]
+           [:li "Consulting"]
+           [:li "Contact"]]]
+         [:main main]]))
