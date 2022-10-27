@@ -4,9 +4,8 @@
 
 This code serves two purposes:
 
-- Provide the site powering usefulprojects.ca
-- Provide an environment for testing technologies and approaches for building
-Clojure based web services.
+- Power the site located at usefulprojects.ca _(Once I've got some content worth publishing)_
+- Provide an environment for testing technologies and approaches for working with Clojure.
 
 Due to the latter, code that may be overkill for the former is welcome. 
 
@@ -16,12 +15,14 @@ Due to the latter, code that may be overkill for the former is welcome.
 Configuration is handled using [aero](https://github.com/juxt/aero).
 
 There are three configuration files, stored in `/config`. 
-Only `config.edn` is checked into source control; 
-example templates are provided for the others.
+Only `config.edn` is checked into source control.
+`environment.edn` and `secrets.edn` are intended to be deployment-specific.
+Example templates are provided and can be created by running 
+`bb init-config`.
 
 #### config.edn
 
-Main entry point for configuration, read by `aero` when the system is built.
+The main entry point for configuration, read by `aero` when the system is built.
 
 There are four profiles that may be used:
 
@@ -81,7 +82,8 @@ Start up the local service dependencies by running `bb dev`, which will shell
 out to `docker-compose`.
 
 To tear down development dependencies to start from scratch, (e.g., to reset 
-postgres if things get into a bad state), run `bb rm-dev`.
+postgres if things get into a bad state), run `bb rm-dev`. Note that this will 
+destroy any existing data and start from a complete blank slate.
 
 #### REPL
 
