@@ -44,6 +44,7 @@
     (reset! hawk-watcher nil)))
 
 (comment
+  ;; If you are working on CSS, you'll want to start the tailwind compiler
   (stop-tailwind-auto-compiler)
   (start-tailwind-auto-compiler))
 
@@ -62,13 +63,18 @@
 
 ;; ----------------------------------------------------------------------- misc
 
+(defn spy>
+  "Like tap>, but returns tapped value instead of true/false."
+  [x]
+  (doto x tap>))
+
 (comment
-  ;; evaluate this on startup if you are using reveal
-  ;; TODO it would be nice to conditionally execute this if reveal is present
-  ;; in user.clj, to remove the manual step.
+  ;; Useful startup commands for Reveal users
   (do
     (require '[vlaaad.reveal :as r]
              'xtdb.node)
+
+    ;; Alter the output of an XtdbNode to avoid flooding Reveal with data
     #_{:clj-kondo/ignore [:unused-import]}
     (import '(xtdb.node XtdbNode))
 
