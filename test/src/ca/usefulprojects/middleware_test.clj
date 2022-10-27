@@ -1,11 +1,11 @@
-(ns ca.usefulprojects.handler-test
+(ns ca.usefulprojects.middleware-test
   (:require
-   [ca.usefulprojects.handler :as sut]
+   [ca.usefulprojects.middleware :as sut]
    [clojure.test :refer [deftest is testing]]))
 
 (deftest provide-component-middleware
   (let [comps    {:a :a :b :b :c :c}
-        handler  (sut/merge-middleware (fn [req & _] req) comps)
+        handler  (sut/merge-to-req (fn [req & _] req) comps)
         req {:x :x}
         expected (merge req comps)]
     (testing "synchronous" (is (= expected (handler req))))
@@ -17,12 +17,12 @@
                   :body    "<p>Test</p>"
                   :status  200}]
     (testing "synchronous handler"
-      (let [handler (sut/hiccup-response-middleware (constantly response))]
+      (let [handler (sut/convert-hiccup (constantly response))]
         (is (= expected (handler nil)))))
     (testing "async handler"
       (let [response-atom (atom nil)
             respond-fn #(reset! response-atom %)
             handler (fn [_req respond _raise] (respond response))
-            wrapped (sut/hiccup-response-middleware handler)]
+            wrapped (sut/convert-hiccup handler)]
         (wrapped nil respond-fn nil)
         (is (= expected @response-atom))))))
