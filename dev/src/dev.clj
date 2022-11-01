@@ -80,3 +80,9 @@
 
     (r/defstream XtdbNode [_]
       (r/raw-string "<XtdbNode>"))))
+
+(comment
+  ;; FlowStorm debugger
+  (do
+    (require '[flow-storm.api :as fs-api])
+    (fs-api/local-connect)))

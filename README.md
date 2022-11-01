@@ -22,7 +22,8 @@ Example templates are provided and can be created by running
 
 #### config.edn
 
-The main entry point for configuration, read by `aero` when the system is built.
+The main entry point for configuration. Read by `aero` when the system is 
+started and then provided to `integrant` for component initialization.
 
 There are four profiles that may be used:
 

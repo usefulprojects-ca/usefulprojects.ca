@@ -8,14 +8,13 @@
 (defmethod aero/reader 'ig/ref [_opts _tag value]
   (ig/ref value))
 
-;; a record is used to enable simple overriding of print/pprint behaviour
+;; a record is used to make it easier to override print/pprint
 (defrecord Config [])
 
 (defn read-config [profile]
-  (map->Config (aero/read-config "config/config.edn" {:profile profile})))
-
-(comment
-  (read-config :local))
+  (with-meta
+    (map->Config (aero/read-config "config/config.edn" {:profile profile}))
+    {::profile profile}))
 
 (defn ->ig-conf
   "Returns configuration suitable for feeding to integrant."
@@ -23,33 +22,27 @@
   (into {} (dissoc config :secrets :environment)))
 
 (comment
+  (read-config :local)
   (->ig-conf (read-config :local)))
 
-(defn- config-values [t]
-  (let [branch? #(or (sequential? %) (map? %))]
-    (remove branch? (tree-seq branch? #(if (map? %) (vals %) %) t))))
+(defn- leaves [t]
+  (remove coll? (tree-seq coll? #(if (map? %) (vals %) %) t)))
 
-(comment
-  (config-values (read-config :local)))
-
-(defn sanitize
-  "Censors any secrets in config to make it suitable for printing.
-  Returns a Map instead of a Config record."
+(defn secrets
+  "Returns a set containing any secrets found in `config`"
   [config]
-  (let [secrets (-> (:secrets config) config-values set)]
-    (walk/postwalk #(if (contains? secrets %) "*****" %) (into {} config))))
+  (-> config :secrets leaves set))
 
-(comment
-  (sanitize (read-config :local)))
+(defn censor
+  "Masks any secrets in config to make it suitable for printing."
+  [secrets value]
+  (walk/postwalk #(if (contains? secrets %) "*****" %) value))
 
 (defmethod print-method Config [x ^java.io.Writer w]
-  (.write w (print-str (sanitize x))))
+  (.write w (str (into {} (censor (secrets x) x)))))
 
 (defmethod pprint/simple-dispatch Config [x]
-  (pprint/pprint (sanitize x)))
-
-;; TODO: print sanitizing works if we're logging a config directly, but further
-;; work is needed at the logging level to check for secret leaks
+  (pprint/pprint (into {} (censor (secrets x) x))))
 
 (comment
   (with-out-str (print (read-config :local)))

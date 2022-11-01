@@ -24,4 +24,19 @@
  :ca.usefulprojects.http/jetty
  {:port 3000
   :make-handler-fn #ig/ref :ca.usefulprojects.handler/make-handler
-  :rebuild-handler-on-request #profile {:default false, :local true}}}
+  :rebuild-handler-on-request #profile {:default false, :local true}}
+
+ :ca.usefulprojects.logging/timbre
+ ;; note that both local and test environments may be running at the same time
+ ;; as such, they should not differ in configuration here; if necessary, alter
+ ;; config at run time using timbre binding utilities
+ #profile
+  {:local
+   {:min-level [[#{"*"} :debug]
+                [#{"com.zaxxer.hikari.*"} :info]]}
+
+   :ci
+   {:min-level :info}
+
+   :prod
+   {:min-level :info}}}
