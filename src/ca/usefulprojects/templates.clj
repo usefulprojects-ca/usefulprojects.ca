@@ -13,14 +13,13 @@
     [:link {:rel "stylesheet" :href "/main.css"}]]
    (into [:body.m-8] body)])
 
-(defn standard [req main]
+(defn page-with-nav [req main]
   (page req
         [[:header.mb-4
           [:h1.font-extrabold "&gt; usefulprojects.ca"]
-          [:p "The humble digital home of Robert Warner"]]
+          [:p "Improving our world by building useful projects"]]
          [:nav
           [:ul
-           [:li "Writings"]
-           [:li "Consulting"]
-           [:li "Contact"]]]
+           [:li "Consulting services"]
+           [:li "Blog"]]]
          [:main main]]))

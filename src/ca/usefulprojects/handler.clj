@@ -25,6 +25,6 @@
                   (constantly [["/test2" {:get (constantly :test2)}]])]}))
 
   (handler {:request-method :get :uri "/"})
-  (handler {:request-method :get :url "/test"})
-  (handler {:request-method :get :url "/test2"})
+  (handler {:request-method :get :uri "/test"})
+  (handler {:request-method :get :uri "/test2"})
   (handler {:request-method :get :uri "/favicon.ico"}))

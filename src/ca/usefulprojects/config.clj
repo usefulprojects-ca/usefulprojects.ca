@@ -21,10 +21,6 @@
   [config]
   (into {} (dissoc config :secrets :environment)))
 
-(comment
-  (read-config :local)
-  (->ig-conf (read-config :local)))
-
 (defn- leaves [t]
   (remove coll? (tree-seq coll? #(if (map? %) (vals %) %) t)))
 
@@ -44,6 +40,11 @@
 (defmethod pprint/simple-dispatch Config [x]
   (pprint/pprint (into {} (censor (secrets x) x))))
 
+;; TODO: for truly comprehensive print/pprint censorship, we'd need to check
+;; *everything* being printed for secrets.
+
 (comment
+  (read-config :local)
+  (->ig-conf (read-config :local))
   (with-out-str (print (read-config :local)))
   (with-out-str (pprint/pprint (read-config :local))))

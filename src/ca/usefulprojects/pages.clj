@@ -7,7 +7,7 @@
 (defn home [req]
   {:status 200
    :body
-   (templates/standard
+   (templates/page-with-nav
     req
     ["test"]
 
