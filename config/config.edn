@@ -17,14 +17,14 @@
 
  :ca.usefulprojects.auth/routes {}
 
- :ca.usefulprojects.handler/make-handler
- {:route-fns [#ig/ref :ca.usefulprojects.pages/routes
+ :ca.usefulprojects.handler/handler
+ {:rebuild-on-request #profile {:default false, :local true}
+  :route-fns [#ig/ref :ca.usefulprojects.pages/routes
               #ig/ref :ca.usefulprojects.auth/routes]}
 
  :ca.usefulprojects.http/jetty
  {:port 3000
-  :make-handler-fn #ig/ref :ca.usefulprojects.handler/make-handler
-  :rebuild-handler-on-request #profile {:default false, :local true}}
+  :handler #ig/ref :ca.usefulprojects.handler/handler}
 
  :ca.usefulprojects.logging/timbre
  ;; note that both local and test environments may be running at the same time!

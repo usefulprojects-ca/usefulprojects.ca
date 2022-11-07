@@ -4,17 +4,28 @@
    [integrant.core :as integrant]
    [reitit.ring :as ring]))
 
-(defn make-handler [{:keys [route-fns]}]
+(defn- wrap-rebuild-handler-middleware
+  "Creates a ring handler that will call `make-handler` on every request.
+  Intended for local development."
+  [make-handler]
+  (fn
+    ([req] ((make-handler) req))
+    ([request respond raise] ((make-handler) request respond raise))))
+
+(defn make-handler [route-fns]
   (ring/ring-handler
-    (ring/router (into [] cat ((apply juxt route-fns)))
+   (ring/router (reduce #(into %1 (%2)) [] route-fns)
                 {:data {:middleware [:log-request]}
                  :reitit.middleware/registry middleware/registry})
    (ring/routes
     (ring/create-file-handler {:path "/" :root "resources/public/"})
     (ring/create-default-handler))))
 
-(defmethod integrant/init-key ::make-handler [_k v]
-  #(make-handler v))
+(defmethod integrant/init-key ::handler
+  [_k {:keys [rebuild-on-request route-fns]}]
+  (if rebuild-on-request
+    (wrap-rebuild-handler-middleware #(#'make-handler route-fns))
+    (make-handler route-fns)))
 
 (comment
   (def handler

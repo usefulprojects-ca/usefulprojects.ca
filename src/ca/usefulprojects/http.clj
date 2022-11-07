@@ -14,28 +14,15 @@
     (log/info "Stopping HTTPServer...")
     (.stop server)))
 
-(defn wrap-handler-rebuild-middleware
-  "Creates a ring handler that will call `make-handler-fn` on every request.
-  Intended for local development."
-  [make-handler-fn]
-  (fn
-    ([req] ((make-handler-fn) req))
-    ([request respond raise] ((make-handler-fn) request respond raise))))
-
 (s/def ::port pos-int?)
-(s/def ::make-handler-fn ifn?)
-(s/def ::rebuild-handler-on-request (s/nilable boolean?))
-
-(s/def ::jetty (s/keys :req-un [::port ::make-handler-fn]
-                       :opt-un [::rebuild-handler-on-request]))
+(s/def ::handler ifn?)
+(s/def ::jetty (s/keys :req-un [::port ::handler]))
 
 (defmethod ig/pre-init-spec ::jetty [_k] ::jetty)
 
 (defmethod ig/init-key ::jetty
-  [_k {:keys [port make-handler-fn rebuild-handler-on-request]}]
-  (start port (if rebuild-handler-on-request
-                (wrap-handler-rebuild-middleware make-handler-fn)
-                (make-handler-fn))))
+  [_k {:keys [port handler]}]
+  (start port handler))
 
 (defmethod ig/halt-key! ::jetty
   [_k server]
