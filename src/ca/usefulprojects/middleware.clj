@@ -28,8 +28,3 @@
        (convert-hiccup-body (handler req)))
       ([req respond raise]
        (handler req (comp respond convert-hiccup-body) raise)))))
-
-(def registry
-  {:hiccup      convert-hiccup
-   :log-request log-request
-   :merge       merge-to-req})

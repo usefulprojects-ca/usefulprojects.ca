@@ -15,8 +15,7 @@
 (defn make-handler [route-fns]
   (ring/ring-handler
    (ring/router (reduce #(into %1 (%2)) [] route-fns)
-                {:data {:middleware [:log-request]}
-                 :reitit.middleware/registry middleware/registry})
+                {:data {:middleware [middleware/log-request]}})
    (ring/routes
     (ring/create-file-handler {:path "/" :root "resources/public/"})
     (ring/create-default-handler))))

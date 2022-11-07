@@ -1,5 +1,6 @@
 (ns ca.usefulprojects.pages
   (:require
+   [ca.usefulprojects.middleware :as middleware]
    [ca.usefulprojects.templates :as templates]
    [integrant.core :as integrant]
    #_[xtdb.api :as xt]))
@@ -27,7 +28,7 @@
 (defn routes [deps]
   [["/" {:name ::home
          :get  home
-         :middleware [:hiccup]}]
+         :middleware [middleware/convert-hiccup]}]
    #_["/xtdb-demo" {:name ::xtdb-demo
                     :get  xtdb-demo
                     :middleware [[:hiccup] [:merge deps]]}]])
