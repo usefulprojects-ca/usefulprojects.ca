@@ -7,12 +7,12 @@
 
 (defn login-form [req]
   {:status 200
-   :body (templates/page-with-nav req [[:p "Login form"]])})
+   :body (templates/page-with-nav req [:p "Login form"])})
 
 (defn process-logout [_req]
   (response/redirect "/" :see-other))
 
-(defn routes []
+(def routes
   [["/auth"
     ["/login" {:name ::login :get login-form
                :middleware [middleware/convert-hiccup]}]

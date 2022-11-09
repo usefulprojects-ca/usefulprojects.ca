@@ -18,9 +18,15 @@
  :ca.usefulprojects.auth/routes {}
 
  :ca.usefulprojects.handler/handler
- {:rebuild-on-request #profile {:default false, :local true}
-  :route-fns [#ig/ref :ca.usefulprojects.pages/routes
-              #ig/ref :ca.usefulprojects.auth/routes]}
+ {;; recreates the handler on every request. makes REPL driven development
+  ;; possible without needing to restart the system on every change.
+  :rebuild-on-request #profile {:default false, :local true}
+
+  ;; the different routes we should be mounting. these should resolve to values
+  ;; that satisfy the ca.usefulprojects.handler/RouteProvider protocol
+  :route-providers
+  [#ig/ref :ca.usefulprojects.pages/routes
+   #ig/ref :ca.usefulprojects.auth/routes]}
 
  :ca.usefulprojects.http/jetty
  {:port 3000
