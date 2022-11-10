@@ -29,8 +29,8 @@
     (testing "404 returned on router miss"
       (is (= 404 (:status (call-handler "/does-not-exist")))))
     (testing "resources are served"
-      ;; TODO: this test depends on a favicon being present.
-      ;; add an assertion to verify it's there
+      (is (.exists (io/file "resources/public/favicon.ico"))
+          "Test assumes `resources/public/favicon.ico` exists")
       (let [{:keys [status headers body]} (call-handler "/favicon.ico")]
         (is (= 200 status))
         (is (= "image/x-icon" (get headers "Content-Type")))

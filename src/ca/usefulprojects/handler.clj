@@ -37,7 +37,7 @@
   should be values that satisfy the `RouteProvider` protocol."
   [route-providers]
   (ring/ring-handler
-   (ring/router (doto (into [] (map get-routes) route-providers) tap>)
+   (ring/router (into [] (map get-routes) route-providers)
                 {:data {:middleware [middleware/log-request]}})
    (ring/routes
     (ring/create-file-handler {:path "/" :root "resources/public/"})
